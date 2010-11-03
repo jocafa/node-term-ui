@@ -211,9 +211,118 @@ TermUI.prototype.quit = function () {
 	process.exit(0);
 };
 
-exports.TermUI = TermUI;
+exports.TermUI = new TermUI({mouse: true});
+
+var TUI = exports.TermUI;
+
+//////////////////////////////////////////////////////////////////[ Widget ]////
+
+function Widget (opts) {
+	var that = this;
+	opts = opts || {};
+
+	this.bounds = opts.bounds || {
+		x: 0, y: 0,
+		w: 0, h: 0
+	};
+
+	Widget.instances.push(this);
+
+	return this;
+}
+
+Widget.instances = [];
+
+inherits(Widget, EventEmitter);
+
+Widget.prototype.handleClick = function (loc) {
+};
+
+exports.Widget = Widget;
+
+exports.TermUI.on('mouseUp', function (loc) {
+	var i = Widget.instances.length;
+	TUI.pos(loc.x, loc.y).out('x');
+
+	while (i--) {
+		var widget = Widget.instances[i];
+		if (
+			loc.x >= widget.bounds.x &&
+			loc.x <= widget.bounds.x + widget.bounds.w &&
+			loc.y >= widget.bounds.y &&
+			loc.y <= widget.bounds.y + widget.bounds.h
+		) {
+			widget.emit('mouseUp', loc);
+		}
+	}
+});
+
+//////////////////////////////////////////////////////////////////[ Button ]////
+function Button (opts) {
+	Widget.call(this, opts);
+	this.fg = opts.fg || TUI.C.w;
+	this.bg = opts.bg || TUI.C.b;
+	this.label = opts.label || '';
+}
+
+inherits(Button, Widget);
+
+Button.prototype.draw = function () {
+	TUI.fg(this.fg).bg(this.bg);
+
+	for (var y = this.bounds.y; y <=this.bounds.y + this.bounds.h; y++) {
+		TUI.pos(this.bounds.x, y);
+		for (var x = this.bounds.x; x <=this.bounds.x + this.bounds.w; x++) {
+			TUI.out(' ');
+		}
+	}
+
+	TUI.pos(this.bounds.x, this.bounds.y).out(this.label);
+};
 
 ///////////////////////////////////////////////////////////////////[ Tests ]////
 __filename == process.argv[1] && (function () {
-	var t = new TermUI({mouse: true});
+	var b = new Button({
+		bounds: {
+			x: 10, y: 10,
+			w: 20, h: 10
+		},
+		bg: 0,
+
+		label: 'Zomgwtf!'
+	});
+
+	var b2 = new Button({
+		bounds: {
+			x: 15, y: 1,
+			w: 20, h: 2 
+		},
+		bg: 1,
+		label: 'Buttahn!'
+	});
+
+	function redraw () {
+		TUI.clear();
+		b.draw();
+		b2.draw();
+		TUI.bg(TUI.C.x).end();
+	}
+
+	b.on('mouseUp', function () {
+		b.bg = (b.bg + 1) % 7;
+		redraw();
+	});
+
+	b2.on('mouseUp', function () {
+		b2.bg = (b2.bg + 1) % 7;
+		redraw();
+	});
+
+	TUI.on('resize', function () {
+		redraw();
+	});
+
+
+	redraw();
+
 })();
