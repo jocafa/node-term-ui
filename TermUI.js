@@ -207,14 +207,5 @@ exports.TermUI = TermUI;
 
 ///////////////////////////////////////////////////////////////////[ Tests ]////
 __filename == process.argv[1] && (function () {
-	new (require('./Tester').Tester)({
-		tests: {
-			instantiation: {
-				'no args': function () {
-					var t = new TermUI({mouse: true});
-					this.assert(t instanceof TermUI, true);
-				}
-			}
-		}
-	});
+	var t = new TermUI({mouse: true});
 })();
