@@ -127,20 +127,24 @@ TermUI.prototype.hibg = function (c) {
 };
 
 TermUI.prototype.enableMouse = function () {
-	this.out('\x1b[?1000h');
+	this.out('\x1b[?1000h'); // enable click
+	this.out('\x1b[?1002h'); // enable drag
 	return this;
 };
 
 TermUI.prototype.disableMouse = function () {
-	this.out('\x1b[?1000l');
+	this.out('\x1b[?1000l'); // disable click
+	this.out('\x1b[?1002l'); // disable drag
+	return this;
+};
+
+TermUI.prototype.eraseLine = function () {
+	this.out('\x1b[2K');
 	return this;
 };
 
 TermUI.prototype.handleInput = function (d) {
-	/*
-	this.pos(1,2);
-	this.out(util.inspect(d));
-	*/
+	//this.pos(1,2).out(util.inspect(d)).end();
 
 	switch (d[0]) {
 		case 3: // ctrl+c
@@ -160,6 +164,10 @@ TermUI.prototype.handleInput = function (d) {
 
 								case 0x23: // mouse up
 									evt = 'mouseUp';
+								break;
+
+								case 0x40: // mouse drag
+									evt = 'mouseDrag';
 								break;
 
 								case 0x60: // scroll up
