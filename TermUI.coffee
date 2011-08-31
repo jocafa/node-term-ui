@@ -145,8 +145,8 @@ class TermUI extends EventEmitter
             eventData.direction = 'up'
 
       eventData.shift = (d[3] & 0x4) > 0
-      eventData.x = d[4] & 0x1f
-      eventData.y = d[5] & 0x1f
+      eventData.x = d[4] - 32
+      eventData.y = d[5] - 32
 
       @emit event, eventData
       @emit 'any', event, eventData
@@ -175,8 +175,8 @@ class Widget extends EventEmitter
   draw: ->
 
   hitTest: (x, y) ->
-    (@bounds.x <= x <= @bounds.x + @bounds.w - 1) and
-    (@bounds.y <= y <= @bounds.y + @bounds.h - 1)
+    (@bounds.x <= x <= (@bounds.x + @bounds.w - 1)) and
+    (@bounds.y <= y <= (@bounds.y + @bounds.h - 1))
 
 Widget.instances = []
 
@@ -278,6 +278,15 @@ if process.argv[1] is __filename
     label: 'hello 5'
     labelAnchor: 5
   b5.draw()
+
+  b5.on 'mousedown', ->
+    b5.bg = T.C.y
+    b5.draw()
+
+  b5.on 'mouseup', ->
+    b5.bg = T.C.b
+    b5.draw()
+
 
   b6 = new Button
     bounds:
