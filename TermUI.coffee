@@ -217,7 +217,7 @@ class Button extends Widget
         T.out labelStr
       else
         T.out emptyStr
-      T.end()
+    T.fg(T.C.x).bg(T.C.x).end()
 
 
 # ===============================================================[ Export ]====
