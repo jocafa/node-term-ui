@@ -7,18 +7,19 @@ interfaces.
 ## General Usage
 
 ### Rendering
-`out(text)` - prints text to the screen from the current cursor position
-`clear()` - clears the screen
-`pos(x,y)` - positions the cursor
-`home()` - sends the cursor to the top left corner
-`end()` - sends the cursor to the bottom right corner
-`fg(color)` - sets the foreground color
-`bg(color)` - sets the background color
-`hifg(color)` - sets the foreground color for 256 color terminals
-`hibg(color)` - sets the background color for 256 color terminals
-`enableMouse()` - enables mouse event handling
-`disableMouse()` - disables mouse event handling
-`eraseLine()` - erases the entire line that the cursor is on
+
+  - `out(text)` - prints text to the screen from the current cursor position
+  - `clear()` - clears the screen
+  - `pos(x,y)` - positions the cursor
+  - `home()` - sends the cursor to the top left corner
+  - `end()` - sends the cursor to the bottom right corner
+  - `fg(color)` - sets the foreground color
+  - `bg(color)` - sets the background color
+  - `hifg(color)` - sets the foreground color for 256 color terminals
+  - `hibg(color)` - sets the background color for 256 color terminals
+  - `enableMouse()` - enables mouse event handling
+  - `disableMouse()` - disables mouse event handling
+  - `eraseLine()` - erases the entire line that the cursor is on
 
 The following will print "Hello, world!" at 10, 20 in the terminal in white text
 on a red background:
@@ -33,7 +34,7 @@ As you can see, pretty much everything is chainable.
 The `C` object contains definitions for common colors so that you don't have
 to remember the numeric values.
 
-	- k: black
+  - k: black
   - r: red
   - g: green
   - y: yellow
