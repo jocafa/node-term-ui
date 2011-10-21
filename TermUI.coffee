@@ -5,10 +5,8 @@ stdio = process.binding('stdio')
 _ = require 'underscore'
 _.mixin require 'underscore.string'
 
-log = console.log
-
 # ===============================================================[ TermUI ]====
-class TermUI extends EventEmitter
+module.exports = T = new class TermUI extends EventEmitter
   constructor: ->
 
     if tty.isatty process.stdin
@@ -111,10 +109,8 @@ class TermUI extends EventEmitter
 
   handleKeypress: (c, key) =>
     if (key && key.ctrl && key.name == 'c')
-      console.log "ctrlc"
       @quit()
     else
-      console.log c, key
       @emit 'keypress', c, key
 
   handleData: (d) =>
@@ -157,11 +153,9 @@ class TermUI extends EventEmitter
     tty.setRawMode(false)
     process.exit()
 
-T = exports.TermUI = new TermUI
-T.enableMouse()
 
 # ===============================================================[ Widget ]====
-class Widget extends EventEmitter
+class T.Widget extends EventEmitter
   constructor: (@options = {}) ->
     @bounds = {
       x: @options.bounds?.x or 0
@@ -170,7 +164,7 @@ class Widget extends EventEmitter
       h: @options.bounds?.h or 0
     }
 
-    Widget.instances.unshift this
+    T.Widget.instances.unshift this
 
   draw: ->
 
@@ -178,16 +172,16 @@ class Widget extends EventEmitter
     (@bounds.x <= x <= (@bounds.x + @bounds.w - 1)) and
     (@bounds.y <= y <= (@bounds.y + @bounds.h - 1))
 
-Widget.instances = []
+T.Widget.instances = []
 
 T.on 'any', (event, eventData) ->
-  for widget in Widget.instances
+  for widget in T.Widget.instances
     if widget.hitTest eventData.x, eventData.y
       eventData.target = widget
       widget.emit event, eventData
 
 # ===============================================================[ Button ]====
-class Button extends Widget
+class T.Button extends T.Widget
   constructor: (opts) ->
     super(opts)
 
@@ -195,6 +189,12 @@ class Button extends Widget
     @bg = @options.fg ? T.C.b
 
     @label = @options.label ? ''
+
+    # labelAnchor values correspond to the locations of the numbers on a
+    # standard keyboard numpad
+    # 7 8 9
+    # 4 5 6
+    # 1 2 3
     @labelAnchor = @options.labelAnchor ? 5
 
   draw: ->
@@ -218,114 +218,3 @@ class Button extends Widget
       else
         T.out emptyStr
     T.fg(T.C.x).bg(T.C.x).end()
-
-
-# ===============================================================[ Export ]====
-exports.Widget = Widget
-exports.Button = Button
-
-if process.argv[1] is __filename
-  T.clear()
-
-  b7 = new Button
-    bounds:
-      x: 1
-      y: 1
-      w: 20
-      h: 3
-    label: 'hello 7'
-    labelAnchor: 7
-  b7.draw()
-
-  b8 = new Button
-    bounds:
-      x: 22
-      y: 1
-      w: 20
-      h: 3
-    label: 'hello 8'
-    labelAnchor: 8
-  b8.draw()
-
-  b9 = new Button
-    bounds:
-      x: 43
-      y: 1
-      w: 20
-      h: 3
-    label: 'hello 9'
-    labelAnchor: 9
-  b9.draw()
-
-
-
-  b4 = new Button
-    bounds:
-      x: 1
-      y: 5
-      w: 20
-      h: 3
-    label: 'hello 4'
-    labelAnchor: 4
-  b4.draw()
-
-  b5 = new Button
-    bounds:
-      x: 22
-      y: 5
-      w: 20
-      h: 3
-    label: 'hello 5'
-    labelAnchor: 5
-  b5.draw()
-
-  b5.on 'mousedown', ->
-    b5.bg = T.C.y
-    b5.draw()
-
-  b5.on 'mouseup', ->
-    b5.bg = T.C.b
-    b5.draw()
-
-
-  b6 = new Button
-    bounds:
-      x: 43
-      y: 5
-      w: 20
-      h: 3
-    label: 'hello 6'
-    labelAnchor: 6
-  b6.draw()
-
-
-
-  b1 = new Button
-    bounds:
-      x: 1
-      y: 9
-      w: 20
-      h: 3
-    label: 'hello 1'
-    labelAnchor: 1
-  b1.draw()
-
-  b2 = new Button
-    bounds:
-      x: 22
-      y: 9
-      w: 20
-      h: 3
-    label: 'hello 2'
-    labelAnchor: 2
-  b2.draw()
-
-  b3 = new Button
-    bounds:
-      x: 43
-      y: 9
-      w: 20
-      h: 3
-    label: 'hello 3'
-    labelAnchor: 3
-  b3.draw()
