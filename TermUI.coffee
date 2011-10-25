@@ -56,6 +56,12 @@ module.exports = T = new class TermUI extends EventEmitter
       process.stdout.write(buf)
     this
 
+  hideCursor: ->
+    @out '\x1b[?25l'
+
+  showCursor: ->
+    @out '\x1b[?25h'
+
   clear: ->
     @out '\x1b[2J'
     @home
@@ -150,6 +156,7 @@ module.exports = T = new class TermUI extends EventEmitter
   quit: ->
     @fg(@C.x).bg(@C.x)
     @disableMouse()
+    @showCursor()
     tty.setRawMode(false)
     process.exit()
 

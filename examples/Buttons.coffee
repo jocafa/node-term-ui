@@ -1,5 +1,6 @@
 T = require '../TermUI'
 T.enableMouse()
+T.hideCursor()
 
 T.clear()
 

@@ -20,6 +20,8 @@ interfaces.
   - `enableMouse()` - enables mouse event handling
   - `disableMouse()` - disables mouse event handling
   - `eraseLine()` - erases the entire line that the cursor is on
+  - `hideCursor()` - hides the cursor
+  - `showCursor()` - shows the cursor
 
 The following will print "Hello, world!" at 10, 20 in the terminal in white text
 on a red background:
