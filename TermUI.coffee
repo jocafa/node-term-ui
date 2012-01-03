@@ -1,6 +1,5 @@
 util = require 'util'
 tty = require 'tty'
-stdio = process.binding('stdio')
 {EventEmitter} = require 'events'
 _ = require 'underscore'
 _.mixin require 'underscore.string'
@@ -46,7 +45,7 @@ module.exports = T = new class TermUI extends EventEmitter
   }
 
   handleSizeChange: =>
-    winsize = tty.getWindowSize(@stdout)
+    winsize = process.stdout.getWindowSize()
     @width = winsize[1]
     @height = winsize[0]
     @emit 'resize', {w: @width, h: @height}

@@ -1,10 +1,20 @@
 {
-	"name": "node-term-ui",
-	"version": "0.0.3",
-	"main": "TermUI.coffee",
-
-	"dependencies": {
-		"underscore": "",
-		"underscore.string": ""
-	}
+  "name": "node-term-ui",
+  "version": "0.0.5",
+  "main": "TermUI.coffee",
+  "dependencies": {
+    "underscore": "",
+    "underscore.string": ""
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": "*"
+  },
+  "author": "Josh Faul <josh.faul@gmail.com> (jocafa.com)",
+  "description": "UI Toolkit for node.js console apps",
+  "homepage": "https://github.com/jocafa/node-term-ui",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jocafa/node-term-ui.git"
+  }
 }
