@@ -3,6 +3,7 @@
   "version": "0.0.5",
   "main": "TermUI.coffee",
   "dependencies": {
+    "keypress": "",
     "underscore": "",
     "underscore.string": ""
   },
