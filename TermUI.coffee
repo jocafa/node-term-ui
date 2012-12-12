@@ -1,3 +1,4 @@
+keypress = require 'keypress'
 util = require 'util'
 tty = require 'tty'
 {EventEmitter} = require 'events'
@@ -9,8 +10,9 @@ module.exports = T = new class TermUI extends EventEmitter
   constructor: ->
 
     if tty.isatty process.stdin
-      tty.setRawMode true
+      process.stdin.setRawMode true
       process.stdin.resume()
+      keypress process.stdin
 
       process.stdin.on 'keypress', @handleKeypress
       process.stdin.on 'data', @handleData
@@ -156,7 +158,7 @@ module.exports = T = new class TermUI extends EventEmitter
     @fg(@C.x).bg(@C.x)
     @disableMouse()
     @showCursor()
-    tty.setRawMode(false)
+    process.stdin.setRawMode false
     process.exit()
 
 
