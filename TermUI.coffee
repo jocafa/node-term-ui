@@ -1,5 +1,6 @@
 util = require 'util'
 tty = require 'tty'
+keypress = require 'keypress'
 {EventEmitter} = require 'events'
 _ = require 'underscore'
 _.mixin require 'underscore.string'
@@ -9,7 +10,8 @@ module.exports = T = new class TermUI extends EventEmitter
   constructor: ->
 
     if tty.isatty process.stdin
-      tty.setRawMode true
+      keypress process.stdin
+      process.stdin.setRawMode true
       process.stdin.resume()
 
       process.stdin.on 'keypress', @handleKeypress
@@ -46,8 +48,8 @@ module.exports = T = new class TermUI extends EventEmitter
 
   handleSizeChange: =>
     winsize = process.stdout.getWindowSize()
-    @width = winsize[1]
-    @height = winsize[0]
+    @width = winsize[0]
+    @height = winsize[1]
     @emit 'resize', {w: @width, h: @height}
 
   out: (buf) ->
@@ -57,9 +59,19 @@ module.exports = T = new class TermUI extends EventEmitter
 
   hideCursor: ->
     @out '\x1b[?25l'
+    this
 
   showCursor: ->
     @out '\x1b[?25h'
+    this
+
+  saveCursor: -> 
+    @out '\x1b7'
+    this
+
+  restoreCursor: -> 
+    @out '\x1b8'
+    this
 
   clear: ->
     @out '\x1b[2J'
@@ -153,10 +165,14 @@ module.exports = T = new class TermUI extends EventEmitter
       @emit 'any', event, eventData
 
   quit: ->
-    @fg(@C.x).bg(@C.x)
-    @disableMouse()
-    @showCursor()
-    tty.setRawMode(false)
+    @fg(@C.x)
+      .bg(@C.x)
+      .disableMouse()
+      .showCursor()
+      .out("\n")
+      .clear()
+
+    process.stdin.setRawMode false
     process.exit()
 
 

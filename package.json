@@ -4,7 +4,8 @@
   "main": "TermUI.coffee",
   "dependencies": {
     "underscore": "",
-    "underscore.string": ""
+    "underscore.string": "",
+    "keypress": ""
   },
   "devDependencies": {},
   "engines": {

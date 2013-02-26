@@ -22,6 +22,8 @@ interfaces.
   - `eraseLine()` - erases the entire line that the cursor is on
   - `hideCursor()` - hides the cursor
   - `showCursor()` - shows the cursor
+  - `saveCursor()` - saves the current cursor position
+  - `restoreCursor()` - restores the saved cursor position
 
 The following will print "Hello, world!" at 10, 20 in the terminal in white text
 on a red background:
